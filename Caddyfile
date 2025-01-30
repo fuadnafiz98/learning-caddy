@@ -1,0 +1,41 @@
+# Global Options
+{
+  debug
+  email dev@fuadnafiz98.com
+}
+
+localhost {
+  # HTTPS options:
+  header Strict-Transport-Security max-age=31536000;
+
+  # Removing some headers for improved security:
+  header -Server
+
+  route {
+
+		handle /v2* {
+				root * /srv/frontend_v2
+				file_server
+				try_files {path} /index.html
+		}
+
+    # serving static files
+    root * /srv/frontend
+    file_server
+    try_files {path} index.html
+  }
+
+  # Serves django static files:
+  route /staticfiles/* {
+    root * /srv
+    file_server
+  }
+
+  # Allows to use `.gz` files when available:
+  encode gzip
+
+  # Logs:
+  log {
+	  output stdout
+  }
+}
